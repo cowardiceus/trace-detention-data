@@ -1,0 +1,33 @@
+name: Update TRAC Detention Data
+
+on:
+  schedule:
+    - cron: "0 6 * * *"  # Runs daily at 6:00 UTC
+  workflow_dispatch:      # Lets you run manually
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.11"
+
+    - name: Install dependencies
+      run: pip install requests beautifulsoup4
+
+    - name: Run Python script
+      run: python update_trac_quickfacts.py
+
+    - name: Commit updated JSON
+      run: |
+        git config user.name "GitHub Action"
+        git config user.email "actions@github.com"
+        git add trac_quickfacts_detention.json
+        git commit -m "Update TRAC data"
+        git push
