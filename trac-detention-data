@@ -1,0 +1,25 @@
+<div id="detention-data" style="font-family: Arial, sans-serif; padding: 10px;">
+  Loading latest detention data...
+</div>
+
+<script>
+const dataUrl = "https://yourusername.github.io/immigration-data/trac_quickfacts_detention.json";
+
+fetch(dataUrl)
+  .then(response => response.json())
+  .then(data => {
+    const container = document.getElementById('detention-data');
+    container.innerHTML = `
+      <h3>Latest Immigration Detention Numbers</h3>
+      <p><strong>Total in detention:</strong> ${data.total_in_detention.toLocaleString()}<br>
+      <strong>Date reported:</strong> ${data.total_in_detention_date}</p>
+      <p><strong>Percent with no convictions:</strong> ${data.pct_no_conviction}%</p>
+      <p><strong>People booked in ${data.booked_during.period}:</strong> ${data.booked_during.count.toLocaleString()}</p>
+      <small>Source: <a href="${data._source_url}" target="_blank">TRAC Reports</a></small>
+    `;
+  })
+  .catch(error => {
+    document.getElementById('detention-data').innerText = "Error loading data.";
+    console.error(error);
+  });
+</script>
